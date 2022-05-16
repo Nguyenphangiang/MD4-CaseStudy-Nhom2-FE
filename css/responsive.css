@@ -262,7 +262,9 @@
 
 
 /* XS Portrait */
+@media (max-width: 800px) {
 
+}
 @media (max-width: 480px) {
     .bill-to{
         margin-top: 10px;
