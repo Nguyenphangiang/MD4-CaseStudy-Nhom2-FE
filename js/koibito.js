@@ -107,9 +107,10 @@ showAllStatus()
 function showInformation(){
     $.ajax({
         type:"GET",
-        url:`http://localhost:8080/koibito/findOneSupplier/3`,
+        url:`http://localhost:8080/koibito/findOneSupplier/1`,
         success:function (supplier){
             // $('#name1').innerHTML(supplier.name)
+            $('#name').val(supplier.name)
             $('#name1').html(supplier.name)
             $('#name2').html(supplier.name)
             $('#name3').html(supplier.name)
@@ -145,10 +146,85 @@ function showInformation(){
 }
 showInformation()
 
+function showFormEditInformation(){
+    $.ajax({
+        type:"GET",
+        url:`http://localhost:8080/koibito/findOneSupplier/1`,
+        success:function (supplier){
+            $('#name').val(supplier.name)
+            $('#email').val(supplier.email)
+            $('#gender').val(supplier.gender)
+            $('#hobby').val(supplier.hobby)
+            $('#personal').val(supplier.personal)
+            $('#note').val(supplier.note)
+            $('#height').val(supplier.height)
+            $('#weight').val(supplier.weight)
+            $('#phone').val(supplier.phone)
+            $('#age').val(supplier.age)
+            $('#address').val(supplier.address)
+
+            $('#status1').html(supplier.status)
+            let img = `<img class="img-fluid w-100 rounded-circle shadow-sm" src="http://localhost:8080/image/${supplier.image}" alt="">`
+            $(`#showImg`).html(img)
+            let img1 = `<img class="img-fluid rounded w-100" src="http://localhost:8080/image/${supplier.image}" alt="">`
+            $(`#showImg1`).html(img1)
+
+        }
+    })
+}
+showFormEditInformation()
+
+function updateSupplier(id){
+    let name = $(`#name`).val();
+    let email = $(`#email`).val();
+    let gender = $(`#gender`).val();
+    let hobby = $(`#hobby`).val();
+    let personal = $(`#personal`).val();
+    let note = $(`#note`).val();
+    let height = $(`#height`).val();
+    let weight = $(`#weight`).val();
+    let phone = $(`#phone`).val();
+    let age = $(`#age`).val();
+    let address = $(`#address`).val();
+    let status = $(`#status`).val();
+    let image = $('#image');
+    let newSupplier = new FormData();
+    newSupplier.append('name', name);
+    newSupplier.append('email', email);
+    newSupplier.append('gender', gender);
+    newSupplier.append('personal', personal);
+    newSupplier.append('note', note);
+    newSupplier.append('height', height);
+    newSupplier.append('weight', weight);
+    newSupplier.append('phone', phone);
+    newSupplier.append('age', age);
+    newSupplier.append('address', address);
+    newSupplier.append('status', status);
+    newSupplier.append('hobby', hobby);
+    newSupplier.append('image', image.prop('files')[0]);
+    if (image.prop('files')[0]=== undefined){
+        let file = new File([""],"filename.jpg")
+        newSupplier.append('image',file);
+    } else {
+        newSupplier.append('image',image.prop('files')[0]);
+    }
+    $.ajax({
+
+        type:"POST",
+        enctype: 'multipart/from-data',
+        processData: false,
+        contentType: false,
+        data: newSupplier,
+        url:`http://localhost:8080/koibito/editSupplier/${id}`,
+        // success:showAll
+    })
+}
+
+
 function showServiceById(){
     $.ajax({
         type:"GET",
-        url:`http://localhost:8080/koibito/findPriceBySupplierId/3`,
+        url:`http://localhost:8080/koibito/findPriceBySupplierId/1`,
         success: function (service) {
             let content = "";
             for (let i = 0; i < service.length; i++) {
