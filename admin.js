@@ -86,5 +86,5 @@ function login(){
 function logout(){
     alert("Cảm ơn vì đã sử dụng dịch vụ");
     window.localStorage.clear();
-    location.href = 'index.html';
+    location.href = '../index.html';
 }

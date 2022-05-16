@@ -1,3 +1,27 @@
+let data = localStorage.getItem("data");
+let obj = JSON.parse(data);
+let idObj
+if (data != null){
+    idObj =  obj.id;
+    showAllSupplier()
+    showInformation()
+    showServiceById()
+    showAllService()
+    showAddress()
+    showAllGender()
+    showAllStatus()
+}
+    else {
+    showAllSupplier();
+    showAllService()
+    showAddress()
+    showAllGender()
+    showAllStatus()
+    }
+
+function setId(id){
+    sessionStorage.setItem("id",id);
+}
 function showAllSupplier(){
     $.ajax({
         type:"GET",
@@ -5,30 +29,42 @@ function showAllSupplier(){
         success: function (supplier){
             let service = [];
             let content = "";
-            let ct = "";
+
             for (let i = 0; i < supplier.length; i++) {
                 let arr = Array.from(supplier[i].serviceSet)
                 service.push(arr);
-                content+=`<tr>
-        <td><img src="${'http://localhost:8080/image/' + supplier[i].image}" width="100px"></td>
-        <td>${supplier[i].name}</td>
-        <td>${supplier[i].age}</td>
-        <td>${supplier[i].height + " cm"}</td>
-        <td>${supplier[i].weight + " kg"}</td>
-        <td id="${supplier[i].id}"></td>
-        <td><button class="btn btn-primary" onclick="deleteBook(${supplier[i].id})" >Add to cart</button></td>
-        <td><button class="btn btn-primary" onclick="showInformation(${supplier[i].id}) showServiceById(${supplier[i].id}) location.href="#information"">View</button></td>
-    </tr>`
-                for (let j = 0; j < service.length; j++) {
 
-                }
+                content +=`<div class="col-sm-4">
+    <div class="product-image-wrapper">
+    <div class="single-products" >
+<div class="productinfo text-center">
+                    <img src="${'http://localhost:8080/image/' + supplier[i].image}" width="256px" height="256px" alt="" />
+    <h2>${supplier[i].name}</h2>
+    <p>${supplier[i].personal}</p>
+   
+    <a href="CaseStudyMD4/index.html" onclick="showInformationById(${supplier[i].id}) ,showServiceById1(${supplier[i].id})" class="btn btn-default add-to-cart"><i class="fa fa-user"></i>Xem</a>
+    </div>
+    <div class="product-overlay">
+    <div class="overlay-content">
+    <h2>${supplier[i].name}</h2
+    <p>Age: ${supplier[i].age}</p>
+    <a href="CaseStudyMD4/index.html" onclick="setId(${supplier[i].id}) " class="btn btn-default add-to-cart"><i class="fa fa-user"></i>Xem</a>
+    </div>
+    </div>
+    </div>
+
+</div>
+</div>
+`
+
             }
 
-            $("#list-supplier").html(content);
+            $("#showSupplierList").html(content);
+
         }
     })
 }
-showAllSupplier();
+
 
 function showAddress(){
     $.ajax({
@@ -44,7 +80,7 @@ function showAddress(){
         }
     })
 }
-showAddress()
+// showAddress()
 
 
 
@@ -58,11 +94,10 @@ function showAllService(){
                 content +=`<option value="${service[i].id}">${service[i].name}</option>`
             }
             $("#service").html(content);
-
         }
     })
 }
-showAllService()
+// showAllService()
 
 function showAllGender(){
     $.ajax({
@@ -78,7 +113,7 @@ function showAllGender(){
         }
     })
 }
-showAllGender()
+
 
 function showAllStatus(){
     $.ajax({
@@ -87,7 +122,7 @@ function showAllStatus(){
         success: function (status){
             let content = "";
             let tt1 = "";
-            let tt2 = "";
+            let tt2 = ""
             for (let i = 0; i < status.length; i++) {
                 if (status[0].status == true){
                     tt1 = "ready"
@@ -103,12 +138,14 @@ function showAllStatus(){
         }
     })
 }
-showAllStatus()
+
 function showInformation(){
+
     $.ajax({
         type:"GET",
-        url:`http://localhost:8080/koibito/findOneSupplier/3`,
+        url:`http://localhost:8080/koibito/findOneSupplier/${idObj}`,
         success:function (supplier){
+            $('#supId').html(supplier.id);
             // $('#name1').innerHTML(supplier.name)
             $('#name1').html(supplier.name)
             $('#name2').html(supplier.name)
@@ -143,12 +180,18 @@ function showInformation(){
         }
     })
 }
-showInformation()
+// showInformation()
+
+
+
+
+
 
 function showServiceById(){
+
     $.ajax({
         type:"GET",
-        url:`http://localhost:8080/koibito/findPriceBySupplierId/3`,
+        url:`http://localhost:8080/koibito/findPriceBySupplierId/${idObj}`,
         success: function (service) {
             let content = "";
             for (let i = 0; i < service.length; i++) {
@@ -161,7 +204,7 @@ function showServiceById(){
         }
     })
 }
-showServiceById()
+// showServiceById()
 function addNewSupplier() {
     //lay du lieu
     let name = $('#name').val();
@@ -177,6 +220,7 @@ function addNewSupplier() {
     let address = $('#address').val();
     let service = $('#service').val();
     let status = $('#status').val();
+
     let image = $('#image');
     let supplier = new FormData();
     supplier.append('name', name);
@@ -191,6 +235,7 @@ function addNewSupplier() {
     supplier.append('phone', phone);
     supplier.append('address', address);
     supplier.append('serviceSet', service);
+    supplier.append("userId",idObj);
     supplier.append('status', status);
     supplier.append('image', image.prop('files')[0]);
 
@@ -215,7 +260,7 @@ var big_image;
 
 $(document).ready(function() {
     BrowserDetect.init();
-    $('body').bootstrapMaterialDesign();
+    // $('body').bootstrapMaterialDesign();
     window_width = $(window).width();
     $navbar = $('.navbar[color-on-scroll]');
     scroll_distance = $navbar.attr('color-on-scroll') || 500;

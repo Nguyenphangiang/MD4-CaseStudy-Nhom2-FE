@@ -54,12 +54,15 @@ function showLoginForm(){
         $('#alreadyLogin').html(content);
        ;
     }
-    let obj = JSON.parse(data)
-    let role = obj.roles.pop().authority;
+    if (data != null){
+        let obj = JSON.parse(data)
+        let role = obj.roles.pop().authority;
+        if (role === "ROLE_USER" || role === "ROLE_ADMIN"){
+            content = `<h3>You are  already login</h3>`
+            $('#alreadyLogin').html(content);
+            showAccountDetail();
+        }
 
-    if (role === "ROLE_USER" || role === "ROLE_ADMIN"){
-        content = `<h3>You are  already login</h3>`
-        $('#alreadyLogin').html(content);
     }
 }
 showLoginForm()
@@ -68,19 +71,20 @@ function showAccountDetail(){
     let obj = JSON.parse(data);
     let content = '';
     if (data == null){
-        window.location.href="index.html";
+        alert("Xin vui lòng đăng nhập hoặc tạo tài khoản mới");
+        window.location.href="login.html";
     } else {
         let role = obj.roles.pop().authority;
         if (role === "ROLE_ADMIN"){
             content = `<a href="userList.html"><i class="fa fa-user"></i> Account</a>`
             $('#accountDetail').html(content);
         } else{
-            content = `<a href="" onclick=""><i class="fa fa-user"></i> Account</a>`
+            content = `<a href="CaseStudyMD4/infomation.html" ><i class="fa fa-user"></i> Account</a>`
             $('#accountDetail').html(content);
         }
     }
 }
-showAccountDetail();
+
 function createUser(){
     event.preventDefault();
     let name = $('#c-name').val();
