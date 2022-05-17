@@ -2,7 +2,7 @@ let data = localStorage.getItem("data");
 let obj = JSON.parse(data);
 let idObj
 if (data != null){
-    idObj =  obj.id;
+    idObj =  obj.id -1;
     showAllSupplier()
     showInformation()
     showServiceById()
@@ -186,48 +186,49 @@ function showInformation(){
 
 
 
-function showFormEditInformation(){
+function showFormEditInformation(id){
     $.ajax({
         type:"GET",
-        url:`http://localhost:8080/koibito/findOneSupplier/1`,
+        url:`http://localhost:8080/koibito/findOneSupplier/${id}`,
         success:function (supplier){
-            $('#name').val(supplier.name)
-            $('#email').val(supplier.email)
-            $('#gender').val(supplier.gender)
-            $('#hobby').val(supplier.hobby)
-            $('#personal').val(supplier.personal)
-            $('#note').val(supplier.note)
-            $('#height').val(supplier.height)
-            $('#weight').val(supplier.weight)
-            $('#phone').val(supplier.phone)
-            $('#age').val(supplier.age)
-            $('#address').val(supplier.address)
+            $('#name7').val(supplier.name)
+            $('#email7').val(supplier.email)
+            $('#gender7').val(supplier.gender)
+            $('#hobby7').val(supplier.hobby)
+            $('#personal7').val(supplier.personal)
+            $('#note7').val(supplier.note)
+            $('#height7').val(supplier.height)
+            $('#weight7').val(supplier.weight)
+            $('#phone7').val(supplier.phone)
+            $('#age7').val(supplier.age)
+            $('#address7').val(supplier.address)
 
-            $('#status1').html(supplier.status)
+            $('#status7').html(supplier.status)
             let img = `<img class="img-fluid w-100 rounded-circle shadow-sm" src="http://localhost:8080/image/${supplier.image}" alt="">`
-            $(`#showImg`).html(img)
+            $(`#showImg7`).html(img)
             let img1 = `<img class="img-fluid rounded w-100" src="http://localhost:8080/image/${supplier.image}" alt="">`
-            $(`#showImg1`).html(img1)
+            $(`#showImg8`).html(img1)
 
         }
     })
 }
-showFormEditInformation()
+showFormEditInformation(idObj)
 
 function updateSupplier(id){
-    let name = $(`#name`).val();
-    let email = $(`#email`).val();
-    let gender = $(`#gender`).val();
-    let hobby = $(`#hobby`).val();
-    let personal = $(`#personal`).val();
-    let note = $(`#note`).val();
-    let height = $(`#height`).val();
-    let weight = $(`#weight`).val();
-    let phone = $(`#phone`).val();
-    let age = $(`#age`).val();
-    let address = $(`#address`).val();
-    let status = $(`#status`).val();
-    let image = $('#image');
+    let name = $(`#name7`).val();
+    let email = $(`#email7`).val();
+    let gender = $(`#gender7`).val();
+    let hobby = $(`#hobby7`).val();
+    let personal = $(`#personal7`).val();
+    let note = $(`#note7`).val();
+    let height = $(`#height7`).val();
+    let weight = $(`#weight7`).val();
+    let phone = $(`#phone7`).val();
+    let age = $(`#age7`).val();
+    let address = $(`#address7`).val();
+    let status = $(`#status7`).val();
+    let image = $('#image7');
+    let user  = idObj-1;
     let newSupplier = new FormData();
     newSupplier.append('name', name);
     newSupplier.append('email', email);
@@ -241,6 +242,7 @@ function updateSupplier(id){
     newSupplier.append('address', address);
     newSupplier.append('status', status);
     newSupplier.append('hobby', hobby);
+    newSupplier.append("user",user)
     newSupplier.append('image', image.prop('files')[0]);
     if (image.prop('files')[0]=== undefined){
         let file = new File([""],"filename.jpg")
